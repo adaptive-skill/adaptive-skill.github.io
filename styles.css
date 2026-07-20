@@ -349,10 +349,10 @@ h3 {
   margin-right: auto;
 }
 
-/* Side-by-side figure pair */
+/* Side-by-side figure pair — left-weighted ~7:3 */
 .figure-pair {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 7fr 3fr;
   gap: 20px;
   align-items: start;
   margin: 28px 0 8px;
