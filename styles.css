@@ -349,6 +349,32 @@ h3 {
   margin-right: auto;
 }
 
+/* Side-by-side figure pair */
+.figure-pair {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  align-items: start;
+  margin: 28px 0 8px;
+}
+.figure-pair .figure-block {
+  margin: 0;
+  min-width: 0;
+}
+.figure-pair .figure-image {
+  width: 100%;
+  max-width: 100%;
+}
+.figure-pair figcaption {
+  max-width: none;
+  font-size: 13px;
+}
+@media (max-width: 800px) {
+  .figure-pair {
+    grid-template-columns: 1fr;
+  }
+}
+
 .overview-section .figure-image {
   margin-top: 24px;
 }

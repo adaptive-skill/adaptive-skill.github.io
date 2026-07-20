@@ -34,7 +34,7 @@
         ]
       }
     </script>
-    <link rel="stylesheet" href="./styles.css?v=20260720d" />
+    <link rel="stylesheet" href="./styles.css?v=20260720e" />
   </head>
   <body>
     <header class="site-header">
@@ -242,32 +242,31 @@
           </p>
         </div>
 
-        <figure class="figure-block plot">
-          <img
-            class="figure-image plot"
-            src="./assets/metric_freedom_scatter.png?v=20260720d"
-            alt="Metric freedom F predicts headroom-normalized skill lift with r=-0.85"
-          />
-          <figcaption>
-            <strong>F is an a priori predictor.</strong>
-            Both output-space and trace-space freedom show a strong negative trend with skill lift
-            (<em>r</em>=−0.85 / −0.77). Large circles = metric aggregates; small = datasets.
-          </figcaption>
-        </figure>
-
-        <figure class="figure-block plot">
-          <img
-            class="figure-image plot"
-            src="./assets/mantel_opposite.png?v=20260720d"
-            alt="Same run pairs yield opposite F under MSA vs MRE"
-          />
-          <figcaption>
-            <strong>Same 60 run-pairs, opposite F.</strong>
-            Under MSA the path–score fit is tight (<em>F</em>≈0.1); under MRE the same pairs
-            scatter (<em>F</em>≈1.0). Freedom is a property of the metric topology—not the task
-            or the agent.
-          </figcaption>
-        </figure>
+        <div class="figure-pair">
+          <figure class="figure-block">
+            <img
+              class="figure-image"
+              src="./assets/metric_freedom_scatter.png?v=20260720e"
+              alt="Metric freedom F predicts headroom-normalized skill lift with r=-0.85"
+            />
+            <figcaption>
+              <strong>F is an a priori predictor.</strong>
+              Output- and trace-space freedom both track skill lift
+              (<em>(r</em>=−0.85 / −0.77).
+            </figcaption>
+          </figure>
+          <figure class="figure-block">
+            <img
+              class="figure-image"
+              src="./assets/mantel_opposite.png?v=20260720e"
+              alt="Same run pairs yield opposite F under MSA vs MRE"
+            />
+            <figcaption>
+              <strong>Same 60 run-pairs, opposite F.</strong>
+              MSA is rigid (<em>F</em>≈0.1); MRE is free (<em>F</em>≈1.0).
+            </figcaption>
+          </figure>
+        </div>
       </section>
 
       <!-- ═══════════════ METHOD ═══════════════ -->
