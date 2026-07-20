@@ -6,14 +6,14 @@
     <title>AdaSkill: When Is Skill Distillation Beneficial?</title>
     <meta
       name="description"
-      content="AdaSkill uses Metric Freedom F to decide when and what to distill from multi-agent systems into single-agent skills."
+      content="AdaSkill uses Metric Freedom F to decide when and what to distill from multi-agent systems into single-agent skills. arXiv:2604.01608"
     />
     <link rel="canonical" href="https://adaptive-skill.github.io/" />
     <meta property="og:title" content="AdaSkill: From Multi-Agent to Single-Agent" />
     <meta property="og:url" content="https://adaptive-skill.github.io/" />
     <meta
       property="og:description"
-      content="Metric Freedom predicts when MAS-to-skill distillation helps. AdaSkill matches or exceeds original MAS at up to 8× lower cost."
+      content="Metric Freedom predicts when MAS-to-skill distillation helps. AdaSkill matches or exceeds original MAS at up to 8× lower cost. arXiv:2604.01608"
     />
     <meta property="og:type" content="website" />
     <script type="application/ld+json">
@@ -23,6 +23,7 @@
         "name": "From Multi-Agent to Single-Agent: When Is Skill Distillation Beneficial?",
         "url": "https://adaptive-skill.github.io/",
         "sameAs": [
+          "https://arxiv.org/abs/2604.01608",
           "https://github.com/Tencent/AdaSkill"
         ],
         "author": [
@@ -43,18 +44,22 @@
       </a>
       <nav class="top-nav" aria-label="Primary navigation">
         <a href="#abstract">Abstract</a>
-        <a href="#idea">Key Idea</a>
+        <a href="#problem">Problem</a>
+        <a href="#metric-freedom">Metric Freedom</a>
         <a href="#method">Method</a>
         <a href="#results">Results</a>
+        <a href="#ablation">Ablation</a>
+        <a href="#takeaways">Takeaways</a>
         <a href="#code">Code</a>
         <a href="#citation">BibTeX</a>
       </nav>
     </header>
 
     <main id="top">
+      <!-- ═══════════════ HERO ═══════════════ -->
       <section class="hero section-band">
         <div class="hero-copy">
-          <p class="venue">arXiv 2026</p>
+          <p class="venue">arXiv:2604.01608 · 2026</p>
           <h1>
             <span class="title-prefix">AdaSkill:</span>
             <span>When Is Skill Distillation Beneficial?</span>
@@ -78,10 +83,10 @@
             † Corresponding author.
           </p>
           <div class="button-row" aria-label="Paper links">
-            <a class="button primary" href="./assets/paper.pdf">Paper</a>
+            <a class="button primary" href="https://arxiv.org/abs/2604.01608">arXiv</a>
+            <a class="button" href="./assets/paper.pdf">PDF</a>
             <a class="button" href="https://github.com/Tencent/AdaSkill">Code</a>
             <a class="button" href="#citation">BibTeX</a>
-            <a class="button" href="https://adaptive-skill.github.io/">Project</a>
           </div>
         </div>
 
@@ -107,81 +112,221 @@
               </div>
             </div>
             <p class="author-notes" style="margin-top:16px">
-              Same trajectories, opposite skill lifts under rigid vs. free metrics.
-              <strong>r = −0.85</strong> between F and headroom-normalized lift.
+              Same agent trajectories yield <em>opposite</em> skill lifts under rigid vs. free metrics.
+              <strong>r = −0.85</strong> (p&nbsp;&lt;&nbsp;0.0001) between F and headroom-normalized lift.
             </p>
           </div>
         </div>
       </section>
 
+      <!-- ═══════════════ ABSTRACT ═══════════════ -->
       <section id="abstract" class="content-section">
         <div class="section-kicker">Abstract</div>
         <p class="abstract-text">
-          Multi-agent systems (MAS) distribute expertise but incur heavy coordination
-          overhead, context fragmentation, and brittle phase ordering. Distilling a MAS
-          into a single-agent skill can bypass these costs, yet outcomes are inconsistent:
+          Multi-agent systems (MAS) tackle complex tasks by distributing expertise, though this
+          often comes at the cost of heavy coordination overhead, context fragmentation, and
+          brittle phase ordering. Distilling a MAS into a single-agent skill can bypass these
+          costs, but this conversion lacks a principled answer for <em>when</em> and
+          <em>what</em> to distill. Instead, the empirical outcome is surprisingly inconsistent:
           skill lift ranges from a <strong>28% improvement</strong> to a
-          <strong>2% degradation</strong> on the exact same task.
-          We show that skill utility is governed by the
-          <em>evaluation metric</em>, not the task. We introduce
-          <strong>Metric Freedom</strong> (<em>F</em>), an a priori predictor of skill
-          utility via a Mantel test over output diversity and score variance.
-          Guided by <em>F</em>, <strong>AdaSkill</strong> selectively distills tools and
-          knowledge while discarding restrictive structure on free metrics, and applies
-          iterative refinement only where the landscape is forgiving.
-          Across 4 tasks, 11 datasets, and 6 metrics, <em>F</em> strongly predicts skill
-          utility (<em>r</em>=−0.85). AdaSkill matches or exceeds the original MAS while
-          reducing cost up to <strong>8×</strong> and latency up to <strong>15×</strong>.
+          <strong>2% degradation</strong> across metrics of the exact same task.
+        </p>
+        <p class="abstract-text">
+          In this work, we reveal that skill utility is governed not by the task, but by the
+          evaluation metric. We introduce <strong>Metric Freedom</strong> (<em>F</em>), the first
+          <em>a priori</em> predictor of skill utility. <em>F</em> measures the topological
+          rigidity of a metric’s scoring landscape by quantifying how output diversity couples
+          with score variance via a Mantel test. Guided by <em>F</em>, we propose
+          <strong>AdaSkill</strong>, a two-stage adaptive distillation framework. Stage&nbsp;1
+          selectively extracts tools and knowledge while discarding restrictive structures on
+          “free” metrics. Stage&nbsp;2 applies iterative refinement selectively where the
+          landscape is forgiving. Across 4 tasks, 11 datasets, and 6 metrics, <em>F</em>
+          strongly predicts skill utility (<em>r</em>=−0.85, <em>p</em>&lt;0.0001). AdaSkill
+          matches or exceeds the original MAS while reducing cost up to <strong>8×</strong>
+          and latency by up to <strong>15×</strong>.
         </p>
       </section>
 
-      <section id="idea" class="content-section">
-        <div class="section-kicker">Key Idea</div>
-        <h2>Skill utility is a metric-level property.</h2>
+      <!-- ═══════════════ PROBLEM ═══════════════ -->
+      <section id="problem" class="content-section">
+        <div class="section-kicker">The Problem</div>
+        <h2>Skill distillation is not universally beneficial.</h2>
         <div class="feature-grid">
           <article>
-            <h3>Metric Freedom (F)</h3>
+            <h3>MAS is expensive</h3>
             <p>
-              Quantifies how tightly behavioral variation couples with score variation.
-              Low <em>F</em>: a knife-edge corridor—structure helps.
-              High <em>F</em>: a flat landscape—structure hurts exploration.
+              Multi-agent systems excel by specializing sub-agents, but pay for coordination
+              overhead, context fragmentation, and brittle phase ordering.
             </p>
           </article>
           <article>
-            <h3>Stage 1: Adaptive Converter</h3>
+            <h3>Blind distillation fails</h3>
             <p>
-              Always keep tools; distill knowledge as conditional references;
-              scale pipeline rigidity with <em>F</em>; always drop inter-agent coordination.
+              Faithfully compiling a MAS into a skill (MAS Compiler) often
+              <em>underperforms</em> even the unskilled base agent—copying structure is not enough.
             </p>
           </article>
           <article>
-            <h3>Stage 2: Selective Iterator</h3>
+            <h3>The missing question</h3>
             <p>
-              Iterate only on mid/high-<em>F</em> metrics where improvement is monotonic.
-              Disable iteration on low-<em>F</em> metrics where fixes oscillate.
+              Prior work focuses on <em>how</em> to distill. We ask
+              <strong>when</strong> and <strong>what</strong> to distill—and answer it with a
+              metric-level criterion.
             </p>
           </article>
         </div>
       </section>
 
-      <section id="method" class="content-section overview-section">
-        <div class="section-kicker">Methodology Overview</div>
-        <h2>AdaSkill: F-guided two-stage distillation.</h2>
-        <p class="abstract-text" style="max-width:820px;margin-bottom:22px">
-          Stage&nbsp;1 converts a MAS into a single-agent skill under Metric Freedom.
-          Stage&nbsp;2 optionally refines the skill with a four-agent loop
-          (Explore · Main · Analyzer · Runner) when residual headroom is safe to chase.
+      <!-- ═══════════════ METRIC FREEDOM ═══════════════ -->
+      <section id="metric-freedom" class="content-section">
+        <div class="section-kicker">Metric Freedom</div>
+        <h2>Skill utility is a metric-level property.</h2>
+        <p class="abstract-text" style="max-width:880px">
+          Not all evaluation metrics benefit equally from structured guidance. In causal
+          estimation, Method Selection Accuracy (MSA) is all-or-nothing, whereas Mean Relative
+          Error (MRE) rewards proximity to the ground truth. We formalize this via
+          <strong>Metric Freedom</strong> (<em>F</em>): the topological decoupling between an
+          agent’s behavioral variation and its score variation.
         </p>
+
+        <div class="two-col" style="margin:28px 0">
+          <article class="callout">
+            <h3>Definition</h3>
+            <p>
+              From <em>n</em> independent baseline runs, build pairwise distance matrices over
+              behavior (outputs or traces) and scores. Apply a Mantel test (Spearman rank
+              correlation <em>r<sub>M</sub></em>). Then:
+            </p>
+            <div class="formula">F = 1 − r<sub>M</sub></div>
+            <ul class="clean-list">
+              <li><strong>F ≈ 0 (rigid):</strong> knife-edge corridor—structure helps.</li>
+              <li><strong>F ≈ 1 (free):</strong> flat landscape—structure restricts exploration.</li>
+              <li><strong>F &gt; 1:</strong> anti-concordant extreme freedom.</li>
+            </ul>
+          </article>
+          <article class="callout">
+            <h3>Two complementary views</h3>
+            <ul class="clean-list">
+              <li>
+                <strong>F<sub>out</sub></strong> — structural distances on final outputs
+                (Jaccard, Hamming, …).
+              </li>
+              <li>
+                <strong>F<sub>trace</sub></strong> — embedding cosine distances on full
+                reasoning traces.
+              </li>
+              <li>
+                Both agree strongly (<em>r</em>≈0.78). Computed from raw-agent runs only—zero
+                skilled-agent overhead.
+              </li>
+              <li>
+                We report <em>headroom-normalized lift</em>:
+                lift / (1 − baseline).
+              </li>
+            </ul>
+          </article>
+        </div>
+
+        <div class="theory-box">
+          <div class="section-kicker">Theory (informal)</div>
+          <h3>Bound on skill lift</h3>
+          <p>
+            For Hölder-continuous scoring functions with non-negative concordance, any skill’s
+            achievable lift is controlled by Metric Freedom:
+          </p>
+          <div class="formula">Lift(π) ≤ L<sub>0</sub> · (1 − F + Δ<sub>n</sub>) · W̃<sub>1</sub>(P<sub>π</sub>, P<sub>0</sub>)</div>
+          <p>
+            As <em>F</em> → 1 the ceiling vanishes: distillation is fundamentally limited on free
+            metrics. A phase-transition analysis further predicts that iterative refinement
+            <em>oscillates</em> on low-<em>F</em> landscapes and <em>converges</em> on mid/high-<em>F</em>.
+          </p>
+        </div>
+
+        <figure class="figure-block">
+          <img
+            class="figure-image large"
+            src="./assets/metric_freedom_scatter.png"
+            alt="Metric freedom F predicts headroom-normalized skill lift with r=-0.85"
+          />
+          <figcaption>
+            <strong>F is an a priori predictor.</strong>
+            Both output-space and trace-space freedom show a strong negative trend with skill lift
+            (<em>r</em>=−0.85 / −0.77). Large circles = metric aggregates; small = datasets.
+          </figcaption>
+        </figure>
+
+        <figure class="figure-block">
+          <img
+            class="figure-image large"
+            src="./assets/mantel_opposite.png"
+            alt="Same run pairs yield opposite F under MSA vs MRE"
+          />
+          <figcaption>
+            <strong>Same 60 run-pairs, opposite F.</strong>
+            Under MSA the path–score fit is tight (<em>F</em>≈0.1); under MRE the same pairs
+            scatter (<em>F</em>≈1.0). Freedom is a property of the metric topology—not the task
+            or the agent.
+          </figcaption>
+        </figure>
+      </section>
+
+      <!-- ═══════════════ METHOD ═══════════════ -->
+      <section id="method" class="content-section overview-section">
+        <div class="section-kicker">Method</div>
+        <h2>AdaSkill: F-guided two-stage distillation.</h2>
+        <p class="abstract-text" style="max-width:880px;margin-bottom:22px">
+          Distilling a MAS is a double-edged sword: structure guides reasoning but constrains
+          exploration. AdaSkill imposes structural guidance only where the metric prefers a
+          single standard answer.
+        </p>
+
         <img
           class="figure-image large"
           src="./assets/overview.png"
-          alt="AdaSkill system overview: Metric Freedom diagnosis, adaptive MAS conversion, and skill iterator"
+          alt="AdaSkill system overview"
         />
+
+        <div class="stage-grid">
+          <article class="stage-card">
+            <div class="stage-badge">Stage 1</div>
+            <h3>Adaptive MAS Converter</h3>
+            <p>Decompose the MAS into four component classes, then convert under F:</p>
+            <ul class="clean-list">
+              <li><strong>Tools</strong> — always retained (capability without constraint).</li>
+              <li><strong>Knowledge</strong> — conditional references, not mandatory scripts.</li>
+              <li><strong>Pipeline structure</strong> — scales with F (mandatory → hints → drop).</li>
+              <li><strong>Coordination</strong> — always discarded (a single model internalizes it).</li>
+            </ul>
+            <p class="author-notes">
+              Multi-metric tasks are distilled per-metric and composed into one skill.
+            </p>
+          </article>
+          <article class="stage-card">
+            <div class="stage-badge">Stage 2</div>
+            <h3>Skill Iterator (optional)</h3>
+            <p>
+              Closes residual headroom left by Stage&nbsp;1’s conservative extraction.
+              <strong>Only activated on mid/high-F metrics.</strong>
+            </p>
+            <ul class="clean-list">
+              <li><strong>Explore</strong> — benchmark boundaries (once).</li>
+              <li><strong>Main</strong> — orchestration &amp; stopping.</li>
+              <li><strong>Runner</strong> — train/val execution with traces.</li>
+              <li><strong>Analyzer</strong> — stateless per-iteration diagnosis of 1–3 worst failures.</li>
+            </ul>
+            <p class="author-notes">
+              Terminates on convergence, sufficiency (&gt;95%), oscillation, or budget.
+              Low-F: disabled—fixes oscillate into zero-sum games.
+            </p>
+          </article>
+        </div>
       </section>
 
+      <!-- ═══════════════ RESULTS ═══════════════ -->
       <section id="results" class="content-section results-section">
         <div class="section-kicker">Results</div>
         <h2>Match MAS quality at a fraction of the cost.</h2>
+
         <div class="metric-row">
           <div class="metric">
             <span class="metric-value">r = −0.85</span>
@@ -195,32 +340,31 @@
             <span class="metric-value">up to 15×</span>
             <span class="metric-label">Lower latency vs. original MAS</span>
           </div>
+          <div class="metric">
+            <span class="metric-value">4 / 11 / 6</span>
+            <span class="metric-label">Tasks · datasets · metrics</span>
+          </div>
         </div>
 
-        <div class="two-col" style="margin-top:28px">
-          <article>
-            <h3>Opposite lifts, same trajectories</h3>
-            <p>
-              On Causal Estimation, identical agent outputs yield large gains under MSA
-              (<em>(F≈0.1)</em> but flat or negative lifts under MRE <em>(F≈0.8–1.0)</em>.
-              Skill utility is metric topology, not task difficulty.
-            </p>
-          </article>
-          <article>
-            <h3>Pipeline is the driver</h3>
-            <p>
-              Component ablations show tools and knowledge help broadly, while pipeline
-              structure alone drives the negative correlation with <em>F</em>
-              (<em>(r≈−0.83)</em>—so AdaSkill keeps structure only where <em>F</em> is low.
-            </p>
-          </article>
-        </div>
+        <figure class="figure-block">
+          <img
+            class="figure-image large"
+            src="./assets/perf_cost_lat.png"
+            alt="Task-level performance, cost, and latency overview"
+          />
+          <figcaption>
+            <strong>Performance–cost–latency overview.</strong>
+            AdaSkill (red) matches or exceeds Original MAS / Base / MAS Compiler accuracy while
+            preserving single-agent cost and latency advantages. Prompt caching further favors
+            single-agent methods (30–40% of uncached price).
+          </figcaption>
+        </figure>
 
-        <div class="table-section" style="margin-top:36px">
+        <div class="table-section" style="margin-top:12px">
           <div class="table-heading">
             <div>
-              <div class="section-kicker">Coverage</div>
-              <h3>4 tasks · 11 datasets · 6 metrics</h3>
+              <div class="section-kicker">Per-task highlights</div>
+              <h3>F regimes dictate what to keep.</h3>
             </div>
           </div>
           <div class="table-wrap">
@@ -231,7 +375,7 @@
                   <th scope="col">Datasets</th>
                   <th scope="col">Metrics</th>
                   <th scope="col">F regime</th>
-                  <th scope="col">AdaSkill takeaway</th>
+                  <th scope="col">What we observe</th>
                 </tr>
               </thead>
               <tbody>
@@ -240,45 +384,144 @@
                   <td>QRData, Synthetic, Real</td>
                   <td>MSA, MRE</td>
                   <td>Low / High</td>
-                  <td>Same skill, opposite lifts across metrics</td>
+                  <td>
+                    Sharpest test: same skill yields +28pp under MSA but flat/negative under MRE.
+                    AdaSkill best on both metrics across datasets.
+                  </td>
                 </tr>
                 <tr>
                   <th scope="row">Text-to-SQL</th>
                   <td>BIRD-147, Spider-120</td>
                   <td>EX, NSF</td>
-                  <td>Mid</td>
-                  <td>Best single-agent EX without MAS cost</td>
+                  <td>Mid (F≈0.50)</td>
+                  <td>
+                    Moderate structure helps: best single-agent EX
+                    (+8.8pp / +5.8pp over raw) without MAS overhead.
+                  </td>
                 </tr>
                 <tr>
                   <th scope="row">Causal Discovery</th>
                   <td>AutoMPG, DWD, Sachs, Child</td>
                   <td>F1</td>
                   <td>Low–Mid</td>
-                  <td>Largest gains on lowest-F dataset</td>
+                  <td>
+                    Largest Stage&nbsp;1 gain on lowest-F Sachs (F1 0.95, +8pp).
+                    Stage&nbsp;2 recovers further on DWDClimate / Child.
+                    MAS up to 8× costlier with no consistent accuracy edge.
+                  </td>
                 </tr>
                 <tr>
                   <th scope="row">Feature Engineering</th>
                   <td>Taobao, Dia</td>
                   <td>AUC</td>
-                  <td>High</td>
-                  <td>Drop pipeline; win on cost &amp; latency</td>
+                  <td>High (F≈0.6–1.0)</td>
+                  <td>
+                    Drop the pipeline entirely. Best mean AUC on Taobao (0.670) at lowest cost
+                    ($3.48 vs $11.46 MAS); latency ~10h → &lt;35min.
+                  </td>
                 </tr>
               </tbody>
             </table>
           </div>
         </div>
+
+        <div class="setup-note">
+          <strong>Setup.</strong>
+          Backbone: Claude Sonnet 4.6 (Claude Code for single-agent methods).
+          Baselines: Original MAS (APEX-SQL, CAIS, MATMCD, FELA), Base Agent, MAS Compiler,
+          Auto Optimization. <em>F</em> from <em>n</em>=6 raw runs × <em>m</em>=6 questions;
+          Stage&nbsp;2 uses a held-out 10% train/val split. GPT-5.1 replication preserves the
+          trend (<em>r</em>=−0.71).
+        </div>
       </section>
 
+      <!-- ═══════════════ ABLATION ═══════════════ -->
+      <section id="ablation" class="content-section">
+        <div class="section-kicker">Ablation &amp; Sensitivity</div>
+        <h2>Pipeline structure is the sole driver of the F–lift correlation.</h2>
+        <p class="abstract-text" style="max-width:880px">
+          Tools and knowledge yield consistent gains across the F spectrum. Pipeline structure
+          alone yields <em>r</em>=−0.83 with lift—and significantly raises cost via exploration
+          taxes. Conditioning pipeline retention on <em>F</em> captures low-F gains without the
+          high-F penalty.
+        </p>
+
+        <figure class="figure-block">
+          <img
+            class="figure-image large"
+            src="./assets/component_ablation.png"
+            alt="Component ablation of tools, knowledge, and pipeline"
+          />
+          <figcaption>
+            <strong>Component attribution.</strong>
+            Top: headroom gain; bottom: ΔCost. Pipeline (panel c) is the only component that
+            systematically hurts as F rises—motivating selective structure.
+          </figcaption>
+        </figure>
+
+        <div class="two-col" style="margin-top:8px">
+          <article class="callout">
+            <h3>Budget for estimating F</h3>
+            <p>
+              Sweeping M∈[1,10] and N∈[3,12]: F<sub>MSA</sub> stabilizes once N≥5;
+              F<sub>MRE</sub> stays high at all budgets. Operating point
+              <strong>N=6, M=6</strong> costs $6.12—a 2.5× saving vs. the full 10×10 grid.
+              A diversity planner is essential: without it F<sub>MSA</sub> is underestimated
+              by ~20%.
+            </p>
+          </article>
+          <article class="callout">
+            <h3>Stage 2 behavior matches theory</h3>
+            <p>
+              Low-F (CE-MSA): reaches 100% val by iter&nbsp;2, then oscillates—fixing one
+              failure breaks another. Mid-F (CD, T2SQL): monotonic gains
+              (+14–15pp F1; EX→86.7%). High-F (FE): early plateau—little path-controllable
+              headroom left.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <!-- ═══════════════ TAKEAWAYS ═══════════════ -->
+      <section id="takeaways" class="content-section">
+        <div class="section-kicker">Practitioner takeaways</div>
+        <h2>Diagnose your metric before investing in skills.</h2>
+        <div class="feature-grid">
+          <article>
+            <h3>1. Measure F first</h3>
+            <p>
+              From a handful of raw-agent runs—no skilled agent needed—predict whether skill
+              engineering will pay off.
+            </p>
+          </article>
+          <article>
+            <h3>2. Keep tools; scale structure</h3>
+            <p>
+              Tools are almost free capability. Pipeline rigidity should track F, not be copied
+              wholesale from the MAS.
+            </p>
+          </article>
+          <article>
+            <h3>3. Iterate only when safe</h3>
+            <p>
+              Stage&nbsp;2 refinement helps mid/high-F metrics and hurts low-F ones. Disable
+              iteration on knife-edge landscapes.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <!-- ═══════════════ CODE ═══════════════ -->
       <section id="code" class="content-section">
         <div class="section-kicker">Code</div>
         <h2>Open source at Tencent/AdaSkill.</h2>
         <p class="abstract-text" style="max-width:820px">
-          Code, evaluation runners, and distillation scripts will live in the public repository.
-          Star and follow for releases.
+          Code, evaluation runners, and distillation scripts live in the public repository.
         </p>
         <div class="button-row">
           <a class="button primary" href="https://github.com/Tencent/AdaSkill">GitHub: Tencent/AdaSkill</a>
-          <a class="button" href="https://adaptive-skill.github.io/">Project Page</a>
+          <a class="button" href="https://arxiv.org/abs/2604.01608">arXiv:2604.01608</a>
+          <a class="button" href="./assets/paper.pdf">PDF</a>
         </div>
         <pre style="margin-top:22px"><code>git clone https://github.com/Tencent/AdaSkill.git
 cd AdaSkill
@@ -286,16 +529,17 @@ cd AdaSkill
 </code></pre>
       </section>
 
+      <!-- ═══════════════ CITATION ═══════════════ -->
       <section id="citation" class="content-section">
         <div class="section-kicker">Citation</div>
         <h2>BibTeX</h2>
         <div class="cite-box" id="bibtex-box">
 <button class="copy-btn" type="button" onclick="copyBib()">Copy</button>
-@article{xu2026adaskill,
-  title   = {From Multi-Agent to Single-Agent: When Is Skill Distillation Beneficial?},
-  author  = {Xu, Binyan and Fang, Dong and Li, Haitao and Zhang, Kehuan},
-  journal = {arXiv preprint},
-  year    = {2026}
+@article{xu2026multi,
+  title={From Multi-Agent to Single-Agent: When Is Skill Distillation Beneficial?},
+  author={Xu, Binyan and Fang, Dong and Li, Haitao and Zhang, Kehuan},
+  journal={arXiv preprint arXiv:2604.01608},
+  year={2026}
 }</div>
       </section>
     </main>
@@ -303,6 +547,7 @@ cd AdaSkill
     <footer class="site-footer">
       <div>
         AdaSkill · LIGHTSPEED, Tencent &amp; CUHK ·
+        <a href="https://arxiv.org/abs/2604.01608">arXiv:2604.01608</a> ·
         <a href="https://github.com/Tencent/AdaSkill">Code</a> ·
         <a href="https://adaptive-skill.github.io/">Project Page</a>
       </div>
@@ -310,7 +555,8 @@ cd AdaSkill
 
     <script>
       function copyBib() {
-        const text = document.getElementById("bibtex-box").innerText.replace(/^Copy\n?/, "").trim();
+        const el = document.getElementById("bibtex-box");
+        const text = el.innerText.replace(/^Copy\s*/, "").trim();
         navigator.clipboard.writeText(text).then(() => {
           const btn = document.querySelector(".copy-btn");
           btn.textContent = "Copied";
