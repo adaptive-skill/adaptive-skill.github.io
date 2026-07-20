@@ -337,6 +337,17 @@ h3 {
   width: 100%;
 }
 
+/* Mid-size figures (e.g. component ablation) */
+.figure-image.mid {
+  width: 100%;
+  max-width: 780px;
+}
+.figure-block.figure-mid {
+  max-width: 820px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 /* Compact plot figures (scatter, mantel, etc.) */
 .figure-image.plot {
   width: 100%;
