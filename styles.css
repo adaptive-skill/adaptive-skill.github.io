@@ -309,8 +309,7 @@ h3 {
 
 .image-section img,
 .case-study-section img,
-.figure-grid img,
-.figure-image {
+.figure-grid img {
   display: block;
   width: 100%;
   border: 1px solid var(--line);
@@ -319,8 +318,35 @@ h3 {
   box-shadow: var(--shadow);
 }
 
+/* Default: natural size, never blow past container */
 .figure-image {
+  display: block;
+  width: auto;
+  max-width: 100%;
   height: auto;
+  margin-left: auto;
+  margin-right: auto;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: var(--shadow);
+}
+
+/* Full-bleed system / multi-panel figures */
+.figure-image.wide {
+  width: 100%;
+}
+
+/* Compact plot figures (scatter, mantel, etc.) */
+.figure-image.plot {
+  width: 100%;
+  max-width: 640px;
+}
+
+.figure-block.plot {
+  max-width: 680px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .overview-section .figure-image {
